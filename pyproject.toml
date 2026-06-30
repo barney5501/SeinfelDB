@@ -1,10 +1,11 @@
 [project]
 name = "seinfeldb"
 version = "0.1.0"
-description = "Add your description here"
+description = "Seinfeld references using a Vector DB🥨↗"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "dotenv>=0.9.9",
+    "gradio>=6.19.0",
     "pinecone>=9.1.0",
 ]
