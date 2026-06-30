@@ -1,1 +1,4 @@
 .env
+seinfeld.json
+__pycache__
+.venv
