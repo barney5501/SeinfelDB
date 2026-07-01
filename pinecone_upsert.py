@@ -5,7 +5,7 @@ import json
 
 load_dotenv()
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
-INDEX_HOST = os.environ["INDEX_HOST"]
+INDEX_HOST = os.environ["PINECONE_INDEX_HOST"]
 
 with open("seinfeld.json", "r") as seinfile:
     records = json.load(seinfile)
