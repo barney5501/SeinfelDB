@@ -1,0 +1,13 @@
+---
+title: seinfelDB
+emoji: 🥨
+colorFrom: gray
+colorTo: gray
+sdk: gradio
+sdk_version: 6.19.0
+app_file: app.py
+pinned: false
+license: mit
+short_description: Vector based search for seinfeld references
+---
+[GitHub link](https://github.com/barney5501/SeinfelDB)

@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Use hfconfig as README.md
+        run: |
+          mv .hfconfig README.md
       - uses: huggingface/hub-sync@v0.1.0
         with:
           github_repo_id: barney5501/SeinfelDB
