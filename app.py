@@ -26,8 +26,10 @@ with gr.Blocks(
     title="SeinfelDB🥨", theme=gr.Theme.from_hub("Yntec/HaleyCH_Theme_Yellow_Green")
 ) as demo:
     gr.Markdown("# Find the perfect comeback 🍤")
-    inp_box = gr.Textbox()
-    gr.Image("shrimp.png", label="The best model", height=650)
+    with gr.Row(equal_height=True):
+        inp_box = gr.Textbox(label="Enter text",scale=8)
+        submit_inp = gr.Button("OK", min_width=60)
+    gr.Image("shrimp.png", label="The best model", width=650)
     out_main_quote = gr.Markdown()
     out_main_credit = gr.Markdown()
 
