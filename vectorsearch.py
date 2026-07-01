@@ -23,7 +23,7 @@ messages = [
 ]
 
 
-def search(query: str) -> Generator[List[Reference]]:
+def search(query: str) -> Generator[List[Reference], None, None]:
     try:
         message = random.choice(messages)
         message_status = Reference(SEID="/", Character="/", Dialogue=message)
@@ -51,5 +51,5 @@ def search(query: str) -> Generator[List[Reference]]:
                 SEID="/",
                 Character="Pinecone",
                 Dialogue=str(e),
-            )
+            ),
         ]
