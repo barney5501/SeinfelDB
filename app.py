@@ -18,6 +18,12 @@ def process_refrences(lines: List[Reference]) -> List[str]:
 
 
 def get_references(query: str) -> Generator[List[str], None, None]:
+    if query == "":
+        top_line_md = '<center>\n\n# "Well you\'re not saying nothing you must be saying something."</center>'
+        top_character_md = '<center>\n\n## -JERRY, S03E12 "</center>'
+        yield [top_line_md, top_character_md, "Try Entering some text!"]
+        return
+
     for response in search(query=query):
         yield process_refrences(response)
 
@@ -27,7 +33,7 @@ with gr.Blocks(
 ) as demo:
     gr.Markdown("# Find the perfect comeback 🍤")
     with gr.Row(equal_height=True):
-        inp_box = gr.Textbox(label="Enter text",scale=8)
+        inp_box = gr.Textbox(label="Enter text", scale=8)
         submit_inp = gr.Button("OK", min_width=60)
     gr.Image("shrimp.png", label="The best model", width=650)
     out_main_quote = gr.Markdown()
@@ -36,11 +42,13 @@ with gr.Blocks(
     gr.Markdown("<br />")
 
     out_others = gr.Markdown()
-    inp_box.submit(
-        fn=get_references,
-        inputs=inp_box,
-        outputs=[out_main_quote, out_main_credit, out_others],
-    )
+    execute = {
+        "fn": get_references,
+        "inputs": inp_box,
+        "outputs": [out_main_quote, out_main_credit, out_others],
+    }
+    submit_inp.click(**execute)
+    inp_box.submit(**execute)
 
 if __name__ == "__main__":
     demo.launch()
