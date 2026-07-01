@@ -38,11 +38,12 @@ Then:
     - PINECONE_API_KEY
     - PINECONE_INDEX_HOST
 4. run the upsert script: `uv run pinecone_upsert.py`
-5. run the app: `uv run main.py`
+5. run the app: `uv run app.py`
 
 Alternatively, you can just replace the SDK calls with a function that yields a constant/random responses for quick local development. see `vectorsearch.py/search()`.
 
 <!-- 
 ROADMAP:
+REDIS
 TELEGRAM
 ENRICH CONTEXT -->
