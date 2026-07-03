@@ -1,6 +1,7 @@
 import gradio as gr
 from vectorsearch import search, Reference
 from typing import List, Generator
+from rate_limiter import check_rate_limit
 
 
 def process_refrences(lines: List[Reference]) -> List[str]:
@@ -17,15 +18,38 @@ def process_refrences(lines: List[Reference]) -> List[str]:
     return [top_line_md, top_character_md, others_md]
 
 
-def get_references(query: str) -> Generator[List[str], None, None]:
+def get_user_ip(request: gr.Request) -> str:
+    fallback = "global"
+    user_ip = fallback
+    if request and request.request:
+        headers = request.request.headers
+        client = request.request.client
+        user_ip = (
+            headers.get("x-forwarded-for")
+            if headers
+            else client.host
+            if client
+            else None
+        )
+    return user_ip or fallback
+
+
+def get_references(query: str, request: gr.Request) -> Generator[List[str], None, None]:
     if query == "":
         top_line_md = '<center>\n\n# "Well you\'re not saying nothing you must be saying something."</center>'
         top_character_md = '<center>\n\n## -JERRY, S03E12 "</center>'
         yield [top_line_md, top_character_md, "Try Entering some text!"]
         return
-
+    user_ip = get_user_ip(request=request)
+    rate_limit = check_rate_limit(user_ip=user_ip)
+    if rate_limit:
+        rate_limit_message = (
+            "<center>\n\n# Only 5 requests are allowed in a minute. </center>"
+        )
+        yield [rate_limit_message, "", "", "soup.webp"]
+        return
     for response in search(query=query):
-        yield process_refrences(response)
+        yield process_refrences(response) + ["shrimp.png"]
 
 
 with gr.Blocks(
@@ -35,7 +59,7 @@ with gr.Blocks(
     with gr.Row(equal_height=True):
         inp_box = gr.Textbox(label="Enter text", scale=8)
         submit_inp = gr.Button("OK", min_width=60)
-    gr.Image("shrimp.png", label="The best model", width=650)
+    img = gr.Image("shrimp.png", label="The best model", width=650)
     out_main_quote = gr.Markdown()
     out_main_credit = gr.Markdown()
 
@@ -45,7 +69,7 @@ with gr.Blocks(
     execute = {
         "fn": get_references,
         "inputs": inp_box,
-        "outputs": [out_main_quote, out_main_credit, out_others],
+        "outputs": [out_main_quote, out_main_credit, out_others, img],
     }
     submit_inp.click(**execute)
     inp_box.submit(**execute)
