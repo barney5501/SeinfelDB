@@ -4,6 +4,7 @@ import os
 import random
 from pydantic import BaseModel, Field
 from typing import List, Generator
+from messages import messages
 
 load_dotenv()
 
@@ -16,16 +17,11 @@ class Reference(BaseModel):
 
 pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
 index = pc.Index(host=os.environ["PINECONE_INDEX_HOST"])
-messages = [
-    "🍤Looking for the perfect comback...",
-    "📦Opening the vault...",
-    "📪Asking Newman...",
-]
 
 
 def search(query: str) -> Generator[List[Reference], None, None]:
     try:
-        message = random.choice(messages)
+        message = random.choice(messages["loading"])
         message_status = Reference(SEID="/", Character="/", Dialogue=message)
         yield [message_status]
 
@@ -45,7 +41,7 @@ def search(query: str) -> Generator[List[Reference], None, None]:
             Reference(
                 SEID="/",
                 Character="/",
-                Dialogue="🎶 Believe it or not, the service has a problem,\nplease leave message at the beep.\nThe usage maxed out, or you'd get a response, we are so sorry!\nBelieve it or not, a problem",
+                Dialogue=messages["db_error"],
             ),
             Reference(
                 SEID="/",

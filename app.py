@@ -2,6 +2,7 @@ import gradio as gr
 from vectorsearch import search, Reference
 from typing import List, Generator
 from rate_limiter import check_rate_limit
+from messages import messages
 
 
 def process_refrences(lines: List[Reference]) -> List[str]:
@@ -36,16 +37,14 @@ def get_user_ip(request: gr.Request) -> str:
 
 def get_references(query: str, request: gr.Request) -> Generator[List[str], None, None]:
     if query == "":
-        top_line_md = '<center>\n\n# "Well you\'re not saying nothing you must be saying something."</center>'
-        top_character_md = '<center>\n\n## -JERRY, S03E12 "</center>'
+        top_line_md = messages["empty_query_line"]
+        top_character_md = messages["empty_query_character"]
         yield [top_line_md, top_character_md, "Try Entering some text!"]
         return
     user_ip = get_user_ip(request=request)
     rate_limit = check_rate_limit(user_ip=user_ip)
     if rate_limit:
-        rate_limit_message = (
-            "<center>\n\n# Only 5 requests are allowed in a minute. </center>"
-        )
+        rate_limit_message = messages["rate_limit"]
         yield [rate_limit_message, "", "", "soup.webp"]
         return
     for response in search(query=query):
