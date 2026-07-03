@@ -49,7 +49,7 @@ def get_references(query: str, request: gr.Request) -> Generator[List[str], None
         yield [rate_limit_message, "", "", "soup.webp"]
         return
     for response in search(query=query):
-        yield process_refrences(response) + ["shrimp.png"]
+        yield process_refrences(response) + ["shrimp.webp"]
 
 
 with gr.Blocks(
@@ -59,7 +59,7 @@ with gr.Blocks(
     with gr.Row(equal_height=True):
         inp_box = gr.Textbox(label="Enter text", scale=8)
         submit_inp = gr.Button("OK", min_width=60)
-    img = gr.Image("shrimp.png", label="The best model", width=650)
+    img = gr.Image("shrimp.webp", label="The best model", width=650)
     out_main_quote = gr.Markdown()
     out_main_credit = gr.Markdown()
 

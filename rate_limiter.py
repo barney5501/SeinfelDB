@@ -13,4 +13,4 @@ def check_rate_limit(user_ip: str, limit: int = 5, window: int = 60):
     count: int = r.incr(key, 1) #type: ignore
     if r.ttl(key) == -1:
         r.expire(key, window)
-    return count >= limit
+    return count > limit
