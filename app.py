@@ -17,7 +17,23 @@ def process_refrences(lines: List[Reference]) -> List[str]:
     return [top_line_md, top_character_md, others_md]
 
 
-def get_references(query: str) -> Generator[List[str], None, None]:
+def get_user_ip(request: gr.Request) -> str:
+    fallback = "global"
+    user_ip = fallback
+    if request and request.request:
+        headers = request.request.headers
+        client = request.request.client
+        user_ip = (
+            headers.get("x-forwarded-for")
+            if headers
+            else client.host
+            if client
+            else None
+        )
+    return user_ip or fallback
+
+
+def get_references(query: str, request: gr.Request) -> Generator[List[str], None, None]:
     if query == "":
         top_line_md = '<center>\n\n# "Well you\'re not saying nothing you must be saying something."</center>'
         top_character_md = '<center>\n\n## -JERRY, S03E12 "</center>'
